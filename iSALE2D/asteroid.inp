@@ -1,0 +1,60 @@
+#ISINP
+------------------------------------------------------------------------
+--- this is the new input file used by iSALE versions of v7.0 and higher
+------------------------------------------------------------------------
+------------------- General Model Info ---------------------------------
+VERSION       __DO NOT MODIFY__             : 4.1
+DIMENSION     dimension of input file       : 2
+PATH          Data file path                : ./
+MODEL         Model name                    : model_B75_scalar
+------------------- Mesh Geometry Parameters ---------------------------
+GRIDH         horizontal cells              : 0           : 3000        : 0
+GRIDV         vertical cells                : 0           : 3200        : 0
+GRIDEXT       ext. factor                   : 1.05d0
+GRIDSPC       grid spacing                  : 0.00978
+------------------- Global setup parameters -----------------------------
+GRAV_V        gravity                       : 0D0
+GRAD_TYPE     gradient type                 : NONE
+------------------- Projectile ("Object") Parameters --------------------
+OBJNUM        number of objects             : 1
+OBJRESH       CPPR horizontal               : 10
+OBJVEL        object velocity               : -4000
+OBJMAT        object material               : impactr
+------------------- Target Parameters ----------------------------------
+LAYNUM        layers number                 : 1
+LAYPOS        layer position                : 3001
+LAYMAT        layer material                : reglith
+------------------- Time Parameters ------------------------------------
+DT            initial time increment        : 1.5D-6
+TDUMP         dump save interval            : 2.D-3
+DTMAX         maximum timestep              : 1.5D-5
+TEND          end time                      : 0.03
+DTSAVE        save interval                 : 6.D-4
+------------------- Boundary Condition Parameters ----------------------
+BND_L         left                          : FREESLIP
+BND_R         right                         : FREESLIP
+BND_B         bottom                        : NOSLIP
+BND_T         top                           : OUTFLOW
+------------------- Numerical Stability Parameters ---------------------
+AVIS          art. visc. linear             : 0.24D0
+AVIS2         art. visc. quad.              : 1.20D0
+ANC           alt. node coupl.              : -0.4D0
+------------------- (Material) Model parameters (global) ---------------
+STRESS        Consider stress               : 1
+ADVECT        Advect by volume              : 1
+------------------- Data Saving Parameters -----------------------------
+COMPRESSION   compression mode              : USER
+QUALITY       Compression rate              : 0
+RANGE         write range                   : 1
+VARLIST       List of variables             : #Alp-Den-Tmp-Pre-VEL-Sie-PlW-Yld-TPS-VEL-STR-VSt#
+------------------------------------------------------------------------
+TR_QUAL       integration qual.             : 1
+TR_AREA       tracer area                   : 4           : 3000        : 294         : 3000
+TR_SPCH       tracer spacing X              : -100.D0     : -100.D0
+TR_SPCV       tracer spacing Y              : -100.D0     : -100.D0
+TR_VAR        add. tracer fields            : #TrP-TrT-TrE-Trp-Trt-Tre-Trd-TrS-TrX-TrY#
+------------------------------------------------------------------------
+PROBE_T       type of probe                 : LAGRANGE
+PROBE_N       number of probes              : -100
+------------------------------------------------------------------------
+<<END
