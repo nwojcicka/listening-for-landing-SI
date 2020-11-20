@@ -1,0 +1,33 @@
+#ISMAT
+--------------------------------------------------------
+MATNAME       Material name                 : impactr     : reglith
+EOSNAME       EOS name                      : tungste     : basalt_
+EOSTYPE       EOS type                      : tillo       : tillo
+STRMOD        Strength model                : JNCK        : LUNDD
+DAMMOD        Damage model                  : NONE        : NONE
+ACFL          Acoustic fluidisation         : NONE        : NONE
+PORMOD        Porosity model                : NONE        : WUNNEMA
+THSOFT        Thermal softening             : NONE        : NONE
+LDWEAK        Low density weakening         : NONE        : POLY
+--------------------------------------------------------
+POIS          pois                          : 3.0000D-01  : 3.0000D-1
+PMININ        minimum pressure              : -2.440D+09  : 0.0000D+0
+---------------- Strength properties -------------------
+YDAM0         Y0=cohesion0                  : 1.0000D+4   : 5.0000D+3
+FRICDAM       internal friction             : 0.7000D+0   : 0.6000D0
+YLIMDAM       limiting strength             : 1.0000D+9   : 2.5000D+8
+--------------- Porosity properties -------------------
+ALPHA0        Initial porosity              : 0.0000D+0   : 1.8D0
+EPSE0         Elastic threshold             : 0.0000D+0   : -2D-4
+ALPHAX        Transition                    : 0.0000D+0   : 1.2D0
+KAPPA         Exp coefficient               : 0.0000D+0   : 0.98D0
+CHI           Sound speed ratio             : 0.0000D+0   : 0.33D0
+-------------------------------------------------------
+----- Johnson-Cook strength parameters ----------------
+JC_A          strain coeff. a               : 1.5060D+09  : 0.0000D+0
+JC_B          strain coeff. b               : 1.7700D+08  : 0.0000D+0
+JC_N          strain exponent               : 1.2000D-01  : 0.0000D+0
+JC_C          str. rate coeff c             : 1.6000D-02  : 0.0000D+0
+JC_M          thermal soft.                 : 1.0000D+00  : 0.0000D+0
+JC_TREF       ref. temperature              : 2.9300D+02  : 0.0000D+0
+<<END
