@@ -1,0 +1,133 @@
+############# Supplementary material for:
+############# Listening for the landing: Estimating the Seismic Detectability of the Mars 2020 EDL Sequence by InSight 
+
+############### MATERIAL PARAMETERS FOR HOSS SIMULATIONS OF CMBD IMPACTS #############
+# Author : Marouchka Froment 
+# mfroment@lanl.gov
+# November 2020
+# LA-UR-20-29570. 
+
+
+#################### Input parameters for HOSS simulations ##################
+
+## Description of used material models:
+## IMPACTOR
+# Volumetric deformation: Tillotson Equation Of State
+# Deviatoric deformation: HOSS H7H solver with Lundborg strength equation
+
+## TARGET
+# Volumetric deformation: SocCrush Equation Of State 
+# Deviatoric deformation: HOSS H7H solver with Lundborg strength equation
+
+
+
+
+## Damping parameters (all materials)
+a = 0.1
+b = 0.5
+c = 0
+d = 0
+## Stabilization 
+EquivalentEV = 0.65 # tungsten
+EquivalentEV = 1.   # sand 
+
+
+
+
+## Tungsten Tillotson parameters
+    Initial Temperature            = 3.000000e+02 !K
+    Initial Specific Energy        = 0.000000e+00 !J/kg
+    Initial Pressure               = 0.000000e+00 !Pa
+    tinya                          = 0.5
+    tinyb                          = 1.04
+    bigA                           = 308.3000e+09 !Pa
+    bigB                           = 250.3000e+09 !Pa
+    Ezero                          = 0.2250000e+08 !J/kg
+    alpha                          = 10.000000e+00
+    beta                           = 10.000000e+00
+    Eiv                            = 1.135000e+06 !J/kg
+    Ecv                            = 1.132200e+06 !J/kg
+    Cv                             = 0.13400e+03 !J/kg/K
+    rho_rho0min                    = 9.090000e-01
+    pmin                           = 2.500000e+14 !Pa
+    Density                        = 19350.0       !kg/m^3
+
+
+
+
+
+## Tungsten H7H parameters
+## Curve are generated with Python
+    import numpy as np
+
+    rho = 19350               # density (kg/m3)
+    K = 308e9                 # Bulk Modulus (Pa)
+    v = 0.28                  # Poisson's ratio
+    G = 3*K*(1-2*v)/(2+2*v)   # Shear Modulus (Pa)
+
+    # Lundborg Strength model, curve parameters
+    Pmin = -800e6             # tensile strength (Pa)
+    mu = 0.2                  # internal friction
+    Ym = 900e6                # max Shear strength (Pa)
+    Pmax = 1e11               # max of P axis (Pa)
+
+    poly = np.poly1d([-1, Ym, Ym*mu*Pmin])
+    Y_0 =poly.r[0]            # Cohesion (Pa)
+
+    npnts = 100               # Number of points on curve
+    def lundborg(P):
+        return(Y_0 + mu * P / (1 + mu*P/(Ym-Y_0)))
+    P  = np.linspace(0,(Pmax-Pmin)**(1/5), npnts)**5+Pmin
+    Y = lundborg(P)
+
+
+
+
+
+## Target SocCrush parameters
+## Parametrisation of the crush curve exponential, from 44% porosity sand data.
+## Following froment et al. (2020) pore-crush curve equation (1)
+## and fitted to Wojcicka et al. (2020) 44% porosity sand model parameters 
+## Curves are defined with Python.
+##                 
+## Elastic regime, adapted from Wojcicka (2020)
+    K = 1.175224e9           # Elastic Bulk Modulus (Pa)
+    Epsilon_Ef = 8.5e-5      # Limit elastic strain (Pa)
+    P_ef = 1e5               # Limite elastic pressure (Pa)
+## Froment et al (2020) crush curve parameters 
+# Obtained from fit of data from crushing experiments on 44% porosity sand
+# These parameters give the equation of the Pore-Crush regime
+# A junction is made with iSALE2D parameters of the elastic regime.  
+    Epsilon_el = 1.05 e-2    # Limit of elastic regime
+    P_el = 4.0 e6            # Transition pressure (Pa)
+    K_trans = 7.89e7         # Transition bulk modulus (Pa)
+    m = 4.8                  # Curve exponent
+## Start of full_crush curve
+    alpha = 0.44             # Porosity
+    Kc = 44e9                # Full Crush modulus (Pa)
+
+
+
+
+## Target H7H parameters
+## Curve generation with python 
+    import numpy as np
+    
+    rho = 1589                 # density (kg/m3)
+    K = 1.17e9                 # Bulk Modulus (Pa)
+    v = 0.3                    # Poisson's ratio
+    G = 3*K*(1-2*v)/(2+2*v)    # Shear Modulus (Pa)
+
+    # Lundborg Strength model, curve parameters
+    Y_0 = 5e3                  # Cohesion (Pa)
+    mu = 0.6                   # internal friction
+    Ym = 250e6                 # max Shear strength (Pa)
+    Pmax = 1e11                # max of P axis (Pa)
+
+    Pmin = -Y_0*(Ym-Y_0)/(mu*Ym)   # tensile strength (Pa)
+    npnts = 100                # Number of points on curve
+
+    def lundborg(P):
+        return(Y_0 + mu * P / (1 + mu*P/(Ym-Y_0)))
+    P  = np.linspace(0,(Pmax-Pmin)**(1/5), npnts)**5+Pmin
+    Y = lundborg(P)
