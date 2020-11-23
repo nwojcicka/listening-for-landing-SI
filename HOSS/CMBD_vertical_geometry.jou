@@ -1,0 +1,158 @@
+############ Supplementary Material for
+############ Listening for the landing: Estimating the Seismic Detectability of the Mars 2020 EDL Sequence by InSight
+############ Journal files for the creation of a 30deg geometry with Cubit ###############
+## Author : Marouchka Froment
+## November 2020
+## mfroment at lanl.gov
+## LA-UR-20-29570
+
+
+reset
+#{pi=3.14159265358979}
+#{D1=30.551181102362207}              # Diameter of a refine zoom
+#{D2=54.99212598425197}               # Total diameter
+#{H1=15.275590551181104}              # Height of a refine zoom
+#{H2=27.496062992125985}              # Total height
+#{d=0.194}                            # Diameter of the impactor
+#{angle=30}                           # Sector angle in degrees
+#{sb1 = 0.03666141732283465}          # impactor mesh
+#{sz1=0.030551181102362206}           # small target mesh size
+#{sz2=0.30551181102362207}            # medium target mesh size
+#{sz3=0.6110236220472441}             # big target mesh size
+#{sz4=(sz3-sz1)/(D1/2)*D2/2+sz1}      # big size
+#{sm1=0.30551181102362207}            # medium wall mesh size
+#{sm2=0.6110236220472441}             # big wall mesh size
+
+
+###############
+# IMPACTOR
+###############
+create sphere radius {d/2.0}
+move volume 1 z {d/2}
+
+###############
+# SAND
+###############
+create cylinder height {H1} radius {D1/2.0}
+move surface 4 location 0.0 0.0 0.0
+create cylinder height {H2} radius {D2/2.0}
+move surface 7 location 0.0 0.0 0.0
+
+webcut volume all with plane yplane offset 0 noimprint nomerge
+delete volume 1 2 3
+compress
+
+webcut volume all with general plane xz spin about axis z angle {angle} noimprint nomerge
+delete volume 4 5 6
+compress
+chop volume 3 with volume 2
+compress
+merge surface all
+
+sweep surface 8 13 10 15 perpendicular distance {2*sz3} keep
+sweep surface 32 16 26 36 perpendicular distance {1.1*d} keep
+sweep surface 44 52 31 17 39 23 perpendicular distance {1.1*d} keep
+unite volume 17 16 15 13 12 14
+unite volume 11 10 9 8 7 6 5 4 8 9
+
+compress all
+merge all
+
+###############
+# MESH
+################
+
+curve 16 17 18 scheme bias fine size {sz1} coarse size {sz3} start vertex 1
+curve 20 scheme bias fine size {sz3} coarse size {sz4} start vertex 9
+curve 21 scheme bias fine size {sz3} coarse size {sz4} start vertex 10
+curve 19 scheme bias fine size {sz3} coarse size {sz4} start vertex 12
+mesh curve 16 17 18 19 20 21
+curve 12 13 11 5 15 14 size {sz3}
+mesh curve 12 13 11 5 15 14
+curve 10 9 1 8 6 7 size {sz4}
+mesh curve 10 9 1 8 6 7
+
+surface 8 9 10 scheme TriDelaunay
+mesh surface 8 9 10
+
+volume 1 scheme tetmesh
+Trimesher volume gradation 1.1
+volume 1 size {sb1}
+mesh volume 1
+
+volume 2 size {sz3}
+volume 2 scheme tetmesh
+Trimesher volume gradation 1.00001
+mesh volume 2
+
+volume 3 size {sz3}
+volume 3 scheme tetmesh
+Trimesher volume gradation 1.00001
+mesh volume 3
+
+curve 64 23 29 scheme bias fine size {sz2} coarse size {sz3} start vertex 1
+mesh curve 64 23 29
+curve 60 48 scheme bias fine size {sz2} coarse size {sz3} start vertex 40
+mesh curve 60 48
+curve 54 scheme bias fine size {sz2} coarse size {sz3} start vertex 30
+mesh curve 54
+curve 40 scheme bias fine size {sz2} coarse size {sz3} start vertex 28
+mesh curve 40
+curve 67 scheme bias fine size {sz2} coarse size {sz3} start vertex 43
+mesh curve 67
+curve 37 36 scheme bias fine size {sz2} coarse size {sz3} start vertex 24
+mesh curve 37 36
+curve 39 35 scheme bias fine size {sz2} coarse size {sz3} start vertex 22
+mesh curve 39 35
+
+curve 43 42 57 59 63 62 58 56 size {sz2}
+mesh curve 43 42 57 59 63 62 58 56
+
+surface 19 20 scheme TriDelaunay
+surface 19 20 size {sz3}
+mesh surface 19 20
+volume 4 5 size {sz2}
+volume 4 5 scheme tetmesh
+Trimesher volume gradation 1.05
+mesh volume 4 5
+
+unmerge volume all
+
+merge volume 2 3
+unite volume 2 3 include_mesh
+merge volume 4 5
+unite volume 4 5 include_mesh
+
+
+###############
+# NODESET
+###############
+nodeset 1 Curve 9
+nodeset 1 name "XYZTarget"              # Fixed boundary conditions
+
+nodeset 2 Surface 6
+nodeset 2 name "SideTarget"       # Sliding (z direction) boundary conditions
+
+nodeset 3 Surface 7
+nodeset 3 name "BottomTarget"     # Sliding (xy direction) boundary conditions
+
+nodeset 4 volume 1
+nodeset 4 name "impactor"         # Initial velocity of -4000m/s
+
+nodeset 5 volume 4
+nodeset 5 name "walls"            # Fixed boundary conditions – no interaction
+
+###############
+# BLOCK
+###############
+block 1 volume 1
+block 1 name "C_impactor"
+
+block 2 volume 2
+block 2 name "C_target"
+
+block 3 volume 4
+block 3 name "Walls"
+
+Set Abaqus Precision 15
+export Abaqus "./CMBD_30deg_geometry.inp" overwrite
