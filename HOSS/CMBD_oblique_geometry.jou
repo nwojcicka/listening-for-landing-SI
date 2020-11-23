@@ -1,0 +1,127 @@
+############ Supplementary Material for
+############ Listening for the landing: Estimating the Seismic Detectability of the Mars 2020 EDL Sequence by InSight
+############ Journal files for the creation of a 180deg geometry with Cubit #############
+## Author : Marouchka Froment
+## November 2020
+## mfroment at lanl.gov
+## LA-UR-20-29570
+
+
+reset
+#{r=0.097}                                   # Radius of the impactor
+#{angle=180}                                 # Sector angle in degree
+#{pi=3.14159265358979}
+#{R2=12 }                                    # Radius of the target cylinder
+#{sb1=0.05}                                  # impactor mesh
+#{sz4=0.5}                                   # big target mesh size
+
+
+###############
+# IMPACTOR
+###############
+create sphere radius {r}
+move volume 1 z {r}
+
+###############
+# SAND
+###############
+
+create sphere radius {R2 * 5/5}
+create sphere radius {R2 * 4/5}
+create sphere radius {R2 * 3/5}
+create sphere radius {R2 * 2/5}
+create sphere radius {R2 * 1/5}
+webcut volume all with plane zplane offset 0 noimprint nomerge
+delete volume 2 3 4 5 6
+
+chop volume 7 with volume 8
+chop volume 12 with volume 9
+chop volume 14 with volume 10
+chop volume 16 with volume 11
+
+webcut volume all with plane yplane offset 0 noimprint nomerge
+delete volume 1 13 15 17 18 19
+compress
+
+sweep surface 3 7 11 18 15 perpendicular distance {2*sz4} keep
+sweep surface 24 28 34 40 46 42 36 30 22 perpendicular distance {1.1*r} keep
+unite volume  12 7 20
+unite volume  19 8 13
+unite volume  18 9 14
+unite volume  17 10 15
+unite volume 16 11
+compress all
+merge all
+
+###############
+# MESH
+################
+
+volume 1 scheme tetmesh
+Trimesher volume gradation 1.1
+volume 1 size {sb1}
+mesh volume 1
+
+
+surface 16 13 9 6 5 scheme Triadvance
+surface 16 size {sz4 * 1/5}
+surface 13 size {sz4 * 2/5}
+surface 9 size {sz4 * 3/5}
+surface 6 size {sz4 * 4/5}
+surface 5 size {sz4 * 5/5}
+mesh surface 16 13 9 6 5
+
+volume 2 3 4 6 5 scheme tetmesh
+volume 5 size {sz4 * 1/5}
+volume 6 size {sz4 * 2/5}
+volume 4 size {sz4 * 3/5}
+volume 3 size {sz4 * 4/5}
+volume 2 size {sz4 * 5/5}
+mesh volume 2 3 4 6 5
+
+unmerge all
+merge volume 2 3 4 6 5
+merge volume 7 8 9 11 10
+
+
+volume 8 9 10 11 7 scheme tetmesh
+volume 8 size {sz4 * 2/5}
+volume 9 size {sz4 * 2/5}
+volume 10 size {sz4 * 3/5}
+volume 11 size {sz4 * 4/5}
+volume 7 size {sz4 * 5/5}
+mesh volume 8 9 10 11 7
+
+unite volume 2 3 4 6 5 include_mesh
+unite volume 7 8 9 11 10 include_mesh
+
+
+###############
+# NODESET
+###############
+nodeset 1 surface 5
+nodeset 1 name "XYZTarget"                # Fixed boundary conditions
+
+nodeset 2 volume 1
+nodeset 2 name "impactor"           # Initial velocity is -4000*cos(10) on z and 4000*sin(10) on x
+
+nodeset 3 volume 7
+nodeset 3 name "walls"              # Fixed boundary conditions
+
+nodeset 4 volume 2
+nodeset 4 name "AllTarget"
+
+###############
+# BLOCK
+###############
+block 1 volume 1
+block 1 name "C_impactor"
+
+block 2 volume 2
+block 2 name "C_target"
+
+block 3 volume 7
+block 3 name "Walls"
+
+Set Abaqus Precision 15
+export Abaqus "./CMBD_180deg_geometry.inp" overwrite
