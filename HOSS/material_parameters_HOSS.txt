@@ -3,9 +3,8 @@
 
 ############### MATERIAL PARAMETERS FOR HOSS SIMULATIONS OF CMBD IMPACTS #############
 # Author : Marouchka Froment 
-# mfroment@lanl.gov
-# November 2020
-# LA-UR-20-29570. 
+# mfroment [at] lanl.gov
+# November 2020 
 
 
 #################### Input parameters for HOSS simulations ##################
@@ -85,24 +84,19 @@ EquivalentEV = 1.   # sand
 
 
 ## Target SocCrush parameters
-## Parametrisation of the crush curve exponential, from 44% porosity sand data.
-## Following froment et al. (2020) pore-crush curve equation (1)
-## and fitted to Wojcicka et al. (2020) 44% porosity sand model parameters 
-## Curves are defined with Python.
 ##                 
-## Elastic regime, adapted from Wojcicka (2020)
+## Elastic regime, adapted from Wojcicka et al., 2020
     K = 1.175224e9           # Elastic Bulk Modulus (Pa)
     Epsilon_Ef = 8.5e-5      # Limit elastic strain (Pa)
     P_ef = 1e5               # Limite elastic pressure (Pa)
 ## Froment et al (2020) crush curve parameters 
-# Obtained from fit of data from crushing experiments on 44% porosity sand
-# These parameters give the equation of the Pore-Crush regime
-# A junction is made with iSALE2D parameters of the elastic regime.  
-    Epsilon_el = 1.05 e-2    # Limit of elastic regime
+## are fitted to the crush curves of a 44% porosity sand (Luo et al., 2011) used by Wojcicka et al., 2020
+## These parameters provide the equation of the Pore-Crush regime of the SocCrush material solver.
+    Epsilon_el = 1.05 e-2    # Start of the crush curve
     P_el = 4.0 e6            # Transition pressure (Pa)
     K_trans = 7.89e7         # Transition bulk modulus (Pa)
     m = 4.8                  # Curve exponent
-## Start of full_crush curve
+## Start of Full-Crush regime of the SocCrush solver
     alpha = 0.44             # Porosity
     Kc = 44e9                # Full Crush modulus (Pa)
 
