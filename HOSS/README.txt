@@ -5,7 +5,7 @@
 # Author : Marouchka Froment 
 # mfroment@lanl.gov
 # November 2020
-# LA-UR-20-29570. 
+# This data is LA-UR-20-29570. 
 
 
 We provide here the Cubit journal files and list of material / simulation parameters that were used to produce the HOSS simulation results of “Listening for the landing: Estimating the Seismic Detectability of the Mars 2020 EDL Sequence by InSight”. 
