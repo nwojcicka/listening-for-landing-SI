@@ -1,0 +1,19 @@
+#TILLO
+--------------------------------------------------------------
+--- Tillotson EOS parameter for *** TUNGSTEN ***
+--------------------------------------------------------------
+--- Tillotson, JH (1962). Metallic equations of state for hypervelocity impact. General Atomic Report GA-3216.
+--------------------------------------------------------------
+TL_RHO0               Reference density (kg/m^3)    :  19.17D+3
+TL_CHEAT              Spec. heat capacity (J/kg/K)  :  1.34D+2
+TL_BULKA              Bulk modulus (Pa)             :  3.08D+11
+TL_BULKB              Tillotson B constant (Pa)     :  2.5D+11
+TL_EZERO              Tillotson E0 constant (J/kg)  :  2.25D+7
+TL_THERMA             Tillotson a constant          :  0.5D0
+TL_THERMB             Tillotson b constant          :  1.04D0
+TL_ALPHA              Tillotson alpha constant      :  10.D0
+TL_BETA               Tillotson beta constant       :  10.D0
+TL_EIV                SIE incipient vaporisation    :  1.1322D+6
+TL_ECV                SIE complete vaporisation     :  1.135D+6
+--------------------------------------------------------------
+<<END
